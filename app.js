@@ -6,7 +6,10 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
-var users = require('./routes/users');
+var create_chatroom = require('./routes/create_chatroom');
+var chatroom = require('./routes/chatroom');
+var admin_login = require('./routes/admin_login');
+var admin_manage = require('./routes/admin_manage');
 
 var app = express();
 
@@ -27,15 +30,23 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.use('/', index);
-app.use('/users', users);
+app.use('/create_chatroom', create_chatroom);
+app.use('/chatroom', chatroom); // todo: should input id
+app.use('/admin_login', admin_login);
+app.use('/admin_manage', admin_manage);
 
 
+var connected_people_cnt = 0;
 // socket.io
 app.io.sockets.on('connection', function(socket) {
-  console.log('a user connected');
+  console.log('a user connected.');
+  connected_people_cnt += 1;
+  app.io.sockets.emit('conn_cnt', { conn_count: connected_people_cnt });
 
   socket.on('disconnect', function() {
-    console.log('user disconnected');
+    console.log('user disconnected.');
+    connected_people_cnt -= 1;
+    app.io.sockets.emit('conn_cnt', { conn_count: connected_people_cnt });
   });
 
   socket.on('chatmsg', function(data){
@@ -63,5 +74,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+
+console.log('Chatting Server starts!');
 
 module.exports = app;

@@ -8,7 +8,7 @@ html
     script.
       $(document).ready(function(){
         var socket = io.connect();
-        socket.on('chatmsg',function(data){
+        /*socket.on('chatmsg',function(data){
           var output = '';
           output += '<li>';
           output += ' <h3>' + data.name + '</h3>'
@@ -17,14 +17,25 @@ html
           output += '</li>';
 
           $(output).prependTo('#content');
-        });
-        $('button').click(function(){
+        });*/
+        /*$('button').click(function(){
           socket.emit('chatmsg', {
             name: $('#name').val(),
             message: $('#message').val(),
             date: new Date().toUTCString()
           });
-        });
+        });*/
+        socket.on('conn_cnt',function(data){
+            var connectedCnt = data.conn_count;
+            $('#lb_conn_cnt').text(connectedCnt);
+          });
+
+        $('#btn_create_room').click(function(){
+            /*todo: create_chatroom페이지로 간다!*/
+          });
+        $('#goto_admin').click(function(){
+            /*todo: admin페이지로 간다!*/
+          });
       });
 
   body

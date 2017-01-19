@@ -1,10 +1,16 @@
 extends layout
 
 block content
-  h1 Socket.io chat
-  p Chat With Node.js
+  h1 Chatting Web Page
+  p Talk with people!
   hr
-  input(id='name')
-  input(id='message')
-  button Send
-  ul(id='content')
+  //- input(id='name')
+  //- input(id='message')
+  //- button Send
+  //- ul(id='content')
+  p 현재 접속인원 :
+  p(id='lb_conn_cnt')
+  br
+  button(id='btn_create_room') 방만들기
+
+  p(id='goto_admin') 관리자세요?
