@@ -1,3 +1,27 @@
 extends layout
 
 block content
+  script.
+    $(document).ready(function(){
+      $('#btn_admin_login').click(function(){
+        /*id와 password를 가지고 post 요청을 보낸다. */
+        var id = $('#et_admin_id').value; //아니면 val() ??
+        var pw = $('#et_admin_pw').value; //todo: 암호화
+
+
+        });
+      });
+
+  div
+    form(action='/login', method='post')
+      div(data-role='fieldcontain')
+        fieldset(data-role='controlgroup')
+          label(for='id') id
+            input(id='et_admin_id', type='text', value='')
+      div#passworddiv(data-role='fieldcontain')
+        fieldset(data-role='controlgroup')
+          label(for='password') password
+            input(id='et_admin_pw', type='password', value='')
+      div(data-role='fieldcontain')
+        input(type='submit', value='로그인', data-transition='fade', data-theme='c')
+          

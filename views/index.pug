@@ -1,6 +1,18 @@
 extends layout
 
 block content
+  script.
+    $(document).ready(function(){
+      $('#btn_create_room').click(function(){
+          location.href='/create_chatroom';
+        });
+      $('#lb_goto_admin').click(function(){
+          location.href='/admin_login'
+        });
+      });
+
+
+
   h1 Chatting Web Page
   p Talk with people!
   hr
@@ -13,4 +25,4 @@ block content
   br
   button(id='btn_create_room') 방만들기
 
-  p(id='goto_admin') 관리자세요?
+  p(id='lb_goto_admin') 관리자세요?
