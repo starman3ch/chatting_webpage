@@ -1,28 +1,55 @@
-extends layout
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src='https://code.jquery.com/jquery-1.12.4.js')
+    script(src='/socket.io/socket.io.js')
+    script.
+      $(document).ready(function(){
+        var socket = io.connect();
 
-block content
-  script.
-    $(document).ready(function(){
-      $('#btn_create_room').click(function(){
-          location.href='/create_chatroom';
+        socket.on('conn_cnt', function(data){
+            var connectedCnt = data.conn_count;
+            $('#lb_conn_cnt').text('현재 접속인원: '+connectedCnt);
+          });
+
+        socket.emit('roomlist');
+
+        socket.on('roomlist', function(data){
+          $('#lb_rooms_cnt').text('현재방 갯수: '+Object.keys(data).length);
+          Object.keys(data).forEach(function(key){
+            //todo: 방 목록들을 보여준다.
+            });
+          });
+
+        $('#btn_create_room').click(function(){
+            location.href='/create_chatroom';
+          });
+        $('#lb_goto_admin').click(function(){
+            location.href='/admin_login'
+          });
+
         });
-      $('#lb_goto_admin').click(function(){
-          location.href='/admin_login'
-        });
-      });
+  body
 
-
-
-  h1 Chatting Web Page
-  p Talk with people!
-  hr
-  //- input(id='name')
-  //- input(id='message')
-  //- button Send
-  //- ul(id='content')
-  p 현재 접속인원 :
-  p(id='lb_conn_cnt')
-  br
-  button(id='btn_create_room') 방만들기
-
-  p(id='lb_goto_admin') 관리자세요?
+    h1 Chatting Web Page
+    p Talk with people!
+    hr
+    p(id='lb_conn_cnt')
+    hr
+    br
+    button(id='btn_create_room') 방만들기
+    br
+    p(id='lb_rooms_cnt')
+    br
+    ul(id='lst_rooms')
+    br
+    hr
+    br
+    br
+    br
+    br
+    br
+    br
+    p(id='lb_goto_admin') 관리자세요?

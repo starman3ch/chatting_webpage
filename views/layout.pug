@@ -1,6 +1,7 @@
 doctype html
 html
   head
+    //- 임시로 이 파일은 폐기한다(안쓴다)
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
     script(src='https://code.jquery.com/jquery-1.12.4.js')
@@ -29,6 +30,33 @@ html
             var connectedCnt = data.conn_count;
             $('#lb_conn_cnt').text(connectedCnt);
           });
+
+        /*-----------------------create_chatroom-----------------------*/
+        socket.on('roomcreated', function(data){
+           /*if(window.location.href='http://127.0.0.1:3000/create_chatroom'){*/
+             alert('방이 만들어졌습니다. 방이름은 '+data.name);
+             location.href='/chatroom';
+           /*} */
+           /*todo: 위에껀 create_chatroom에 있을 때 타는 거고,
+           그냥 index에서 이벤트 받으면 리스트만 추가해서 갱신해줘야되는데..
+           파일 분기도 안되고... 이건 뭐... ㅅㅂ..*/
+
+           });
+
+        /*$('#btn_create_room').click(function(){
+          var chatroom_name = document.getElementById('chatroom_name').value;
+          if(chatroom_name){
+            socket.emit('createroom', {
+              name: chatroom_name
+            });
+          }else{
+            alert('방 이름을 입력하세요.');
+          }
+          });*/
+        /*-----------------------/create_chatroom/-----------------------*/
+
+
+
 
       });
 

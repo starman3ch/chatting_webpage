@@ -1,3 +1,36 @@
-extends layout
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src='https://code.jquery.com/jquery-1.12.4.js')
+    script(src='/socket.io/socket.io.js')
+    script.
+      $(document).ready(function(){
+        var socket = io.connect();
 
-block content
+        socket.on('roomcreated', function(data){
+          alert('방이 만들어졌습니다. 방이름은 '+data.name);
+          // todo: chatroom 페이지로 이동
+          });
+
+        /*$('#btn_create_room').click(function(){
+          이 함수로 클릭 이벤트가 안 먹힌다.. 뭐지?
+          });*/
+        $(document).on('click', '#btn_create_room', function(){
+
+          var chatroom_name = document.getElementById('chatroom_name').value;
+          if(chatroom_name){
+            socket.emit('createroom', {
+              name: chatroom_name
+              });
+          }else{
+            alert('방 이름을 입력하세요.');
+          }
+
+          });
+        });
+
+  body
+    input(id='chatroom_name', type='text')
+    button(id='btn_create_room') 방만들기

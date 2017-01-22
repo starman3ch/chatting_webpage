@@ -37,6 +37,8 @@ app.use('/admin_manage', admin_manage);
 
 
 var connected_people_cnt = 0;
+var socket_room = {};
+var room_id = 0;
 // socket.io
 app.io.sockets.on('connection', function(socket) {
   console.log('a user connected.');
@@ -49,11 +51,28 @@ app.io.sockets.on('connection', function(socket) {
     app.io.sockets.emit('conn_cnt', { conn_count: connected_people_cnt });
   });
 
+  socket.on('roomlist', function(){
+    console.log('show room list. room_count:'+Object.keys(socket_room).length);
+    // var rooms = app.io.sockets.manager.rooms;
+    socket.emit('roomlist', socket_room);
+  });
+
   socket.on('chatmsg', function(data){
-    console.log('chat msg| name:'+data.name+', message:'+data.message);
+    console.log('chat msg| name:'+data.name);
     app.io.sockets.emit('chatmsg', data);
   });
+
+  socket.on('createroom', function(data){
+    console.log('a user create room. room_id:'+room_id+', room_name:'+data.name);
+    socket.join(room_id);
+    socket_room[room_id] = data.name;
+    // app.io.sockets.emit('roomcreated', data);
+    console.log('a user create room. now room_count:'+Object.keys(socket_room).length);
+    room_id++;
+    socket.emit('roomcreated', data);
+  });
 });
+
 
 
 // catch 404 and forward to error handler
