@@ -3,6 +3,24 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
+    style.
+      #btn_create_room {
+        float:left,
+        width:40em;
+        height:5em;
+        margin: 5px;
+        padding: 5px;
+      }
+      #lb_rooms_cnt {
+        float:right;
+        width:10em;
+        height:5em;
+        margin: 5px;
+        padding: 5px;
+      }
+      #line {
+        clear:both;
+      }
     script(src='https://code.jquery.com/jquery-1.12.4.js')
     script(src='/socket.io/socket.io.js')
     script.
@@ -19,16 +37,45 @@ html
         socket.on('roomlist', function(data){
           $('#lb_rooms_cnt').text('현재방 갯수: '+Object.keys(data).length);
           Object.keys(data).forEach(function(key){
-            //todo: 방 목록들을 보여준다.
+            //todo: 방 목록들을 보여준다. -- 방 왜 안나와??
+            var output = '';
+            output += '<li>';
+            //todo: key 라는 데이터를 이렇게 태그의 id로 가지고 있어도 되나..? 확인
+            //output += '<li id=' + key + '>';
+            //output += '  <p>' + data[key] + '</p>';
+            output += ' <p><a href="/chatroom/' + key + '">' + data[key] + '</a></p>'
+            output += '</li>';
+            //$(output).append('#lst_rooms');
+            //$(output).prependTo('#content');
+            $('#lst_rooms').append(output);
             });
           });
 
+        socket.on('roomcreated', function(data){
+            //todo: $('#lb_rooms_cnt')에 +1 해준다.
+            //todo: 아래도 'roomlist' 이벤트 받았을때와 똑같이 해준다. 아니면 아래쪽 로직을 메소드로 빼둘 것.
+            var output = '';
+            output += '<li>';
+            output += ' <p>' + data.name + '</p>';
+            output += '</li>';
+            //$(output).append('#lst_rooms');
+            $('#lst_rooms').append(output);
+        });
+
+        // '방만들기' 클릭
         $('#btn_create_room').click(function(){
             location.href='/create_chatroom';
           });
+        // 관리자 로그인 페이지로 가기 클릭
         $('#lb_goto_admin').click(function(){
             location.href='/admin_login'
           });
+
+        /*$('#lst_rooms').click(function(e){
+          var room_key = e.target.id;
+
+          });*/
+
 
         });
   body
@@ -45,7 +92,7 @@ html
     br
     ul(id='lst_rooms')
     br
-    hr
+    hr(id='line')
     br
     br
     br

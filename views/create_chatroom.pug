@@ -19,7 +19,7 @@ html
           });*/
         $(document).on('click', '#btn_create_room', function(){
 
-          var chatroom_name = document.getElementById('chatroom_name').value;
+          var chatroom_name = document.getElementById('et_chatroom_name').value;
           if(chatroom_name){
             socket.emit('createroom', {
               name: chatroom_name
@@ -32,5 +32,5 @@ html
         });
 
   body
-    input(id='chatroom_name', type='text')
+    input(id='et_chatroom_name', type='text')
     button(id='btn_create_room') 방만들기

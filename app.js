@@ -57,8 +57,16 @@ app.io.sockets.on('connection', function(socket) {
     socket.emit('roomlist', socket_room);
   });
 
+  socket.on('joinroom', function(data){
+    var r_id = data.room_id;
+    console.log('a user join room. room_id:'+r_id);
+    socket.join(r_id);
+    socket.emit('joined');
+  });
+
   socket.on('chatmsg', function(data){
-    console.log('chat msg| name:'+data.name);
+    // console.log('chat msg| name:'+data.name);
+    console.log('chat msg');
     app.io.sockets.emit('chatmsg', data);
   });
 
@@ -66,10 +74,13 @@ app.io.sockets.on('connection', function(socket) {
     console.log('a user create room. room_id:'+room_id+', room_name:'+data.name);
     socket.join(room_id);
     socket_room[room_id] = data.name;
-    // app.io.sockets.emit('roomcreated', data);
     console.log('a user create room. now room_count:'+Object.keys(socket_room).length);
+    // app.io.sockets.emit('roomcreated', data);
+    socket.emit('roomcreated', {
+      id: room_id,
+      name: socket_room[room_id]
+    });
     room_id++;
-    socket.emit('roomcreated', data);
   });
 });
 

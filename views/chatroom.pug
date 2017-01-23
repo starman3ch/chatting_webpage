@@ -1,3 +1,65 @@
-extends layout
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    style.
+      #lst_chat {
+        float:left;
+      }
+      #lst_participant {
+        float:right;
+      }
+      #btn_send_chat {
+        clear:both;
+      }
+    script(src='https://code.jquery.com/jquery-1.12.4.js')
+    script(src='/socket.io/socket.io.js')
+    script.
+      $(document).ready(function(){
+        /*var user_name = prompt('이 방에서 사용할 이름을 입력하세요.', '');
+        if (!user_name) {
+          user_name = 'user_' + new Date().getMilliseconds();
+          alert('랜덤 이름을 사용합니다. 당신의 이름은 '+user_name);
+          //todo: 이름을 다시 입력받게끔 해야될듯...
+        }*/
 
-block content
+        var socket = io.connect(); //todo: 근데 궁금한게.. 이러면 매 페이지마다 socket을 새로 연결하는건가...?
+        var isJoined = false;
+
+        socket.emit('joinroom', {
+            room_id: #{room_id};
+          });
+
+        socket.on('joined', function(){
+          isJoined = true;
+          });
+
+        $('#btn_send_chat').click(function(){
+          if (isJoined) {
+            var chatmsg = document.getElementById('et_chat').value;
+            if(chatmsg) {
+              socket.emit('chatmsg', {
+                msg: chatmsg
+                });
+            }
+          }
+          });
+
+        socket.on('chatmsg', function(data){
+          if (isJoined) {
+            //todo: 받은 채팅 메시지를 리스트에 붙여서 보여준다.
+          }
+          });
+
+        });
+
+  body
+
+    h2(id='lb_chatroom_name')
+    hr
+    br
+    ul(id='lst_chat')
+    ul(id='lst_participant')
+    input(id='et_chat')
+    button(id='btn_send_chat') 보내기

@@ -1,0 +1,15 @@
+
+
+CHATROOM TABLE
+id
+name
+create_date
+expired_date
+
+
+CHAT TABLE
+id
+user_name
+message
+send_date
+room_id
